@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>Simple Flask TODO app in Python Flask</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script  type = "text/javascript">
+      function redirect(link) {
+        window.location.href = link;
+     }
+    </script>
+</head>
+  <body>
+  <div class="container">
+    <h2 class="display-2">Dapp</h2>
+    <form method="POST" action="/">
+        <div>
+          <input type="radio" class="radio" name="option" value="1" id="create" onclick="getOptionValue()" checked/>
+          <label for="create">Create</label>
+          <input type="radio" class="radio" name="option" value="2" onclick="getOptionValue()" id="read" />
+          <label for="read">Read</label>
+          <input type="radio" class="radio" name="option" value="3" onclick="getOptionValue()" id="update"/>
+          <label for="create">Update</label>
+          <input type="radio" class="radio" name="option" value="4" onclick="getOptionValue()" id="delete" />
+          <label for="read">Delete</label>
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" name="id" class="form-control" placeholder="Insert id" required>
+            <div class="input-group-append submit-read-and-delete" id="button-addon-read-and-delete" style="display: none;">
+              <button class="btn btn-outline-primary" type="submit" value="update">Submit</button>
+            </div>
+        </div>
+        <div class="input-group mb-3" id="form-create-and-update">
+            <input type="text" name="text" class="form-control" placeholder="Insert data">
+            <div class="input-group-append submit-create-and-update" id="button-addon">
+              <button class="btn btn-outline-primary" type="submit" value="update">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    {% if notes %}
+    <h2 class="display-2">Result</h2>
+    <!-- <p>Account {{notes.account_name}} has {{notes.balance}}</p> -->
+    <pre id="result">{{notes}}</pre>
+    <!-- {% for note in notes %}
+      <p>
+        <form method="POST" action="/edit/{{note.id}}">
+            <div class="input-group mb-3">
+
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="hidden" name="done" value="off">
+                    <input type="checkbox" onclick="redirect('/edit/{{note.id}}')" data-target="/edit/{{note.id}}" name="done">
+                </div>
+              </div>
+
+              <input type="text" title="{{note.dateAdded}}" value="{{note.text}}" name="text" class="form-control">
+
+              <div class="input-group-append" id="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit" value="update">Update</button>
+              </div>
+
+            </div>
+        </form>
+      {% endfor %} -->
+    {% else %}
+    <pre id="result"></pre>
+    {% endif %}
+  </div>
+
+  <script type="text/javascript">
+      function getOptionValue() {
+        let modId = event.target.value;
+        if (modId == 1 || modId == 3) {
+          document.getElementById('button-addon-read-and-delete').style.display = "none";
+          document.getElementById('form-create-and-update').style.display = "";
+        } else {
+          document.getElementById('button-addon-read-and-delete').style.display = "inline-block";
+          document.getElementById('form-create-and-update').style.display = "none";
+        }
+      }
+
+      // window.onload = function() {
+      //   let pResult = document.getElementById("result"); 
+      //   let result  = document.getElementById("result").innerHTML;
+      //   if (result) {
+      //     console.log(result);
+      //     console.log(JSON.parse(result));
+      //     pResult.textContent = JSON.stringify(JSON.parse(result), undefined, 2);
+      //   }
+      // }
+      
+  </script>
+  </body>
+</html>
