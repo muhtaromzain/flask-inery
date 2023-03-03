@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A simple application with the ability to add, edit and delete records.
+A simple application with the ability to add, read, edit and delete records.
 
 ### Compile the Smart Contract
 
