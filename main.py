@@ -23,46 +23,20 @@ else:
 account     = os.environ.get('ACCOUNT')
 privatekey  = os.environ.get('PRIVATE_KEY')
 
-def create(mod, trans_id, text) :
+def push(mod, trans_id, text = '') :
     action = mod
     
-    action_data = {
-        "id": trans_id, 
-        "user": account,
-        "data": text
-    }
-
-    payload = {
-        "account": account,
-        "name": action,
-        "authorization": [{
-            "actor": account,
-            "permission": "owner",
-        }]
-    }
-
-    # Converting payload to binary
-    data = api.abi_json_to_bin(account, action, action_data)
-    payload['data'] = data['binargs']
-
-    # final transaction formed
-    trx = {"actions": [payload]}
-    trx['expiration'] = str((dt.datetime.utcnow() + dt.timedelta(seconds=60)).replace(tzinfo=pytz.UTC))
-
-    key = keys.INRKey(privatekey)
+    if (mod == 'create' or mod == 'update'):
+        action_data = {
+            "id": trans_id, 
+            "user": account,
+            "data": text
+        }
     
-    resp = api.push_transaction(trx, key, broadcast=True)
-    result = json.dumps(resp, indent = 4) 
-
-    return result
-
-
-def read(mod, trans_id):
-    action = mod
-    
-    action_data = {
-        "id": trans_id
-    }
+    if (mod == 'read' or mod == 'destroy'):
+        action_data = {
+            "id": trans_id
+        }
 
     payload = {
         "account": account,
@@ -99,8 +73,8 @@ def view_index():
                 name = 'update'
             
             try:
-                dataCreate = create(name, request.form['id'], request.form['text'])
-                return render_template("index.html", notes=dataCreate)
+                resultData = push(name, request.form['id'], request.form['text'])
+                return render_template("index.html", notes=resultData)
             except Exception as e:
                 return render_template("index.html", notes=str(e))
         elif (request.form['option'] == '2' or request.form['option'] == '4'):
@@ -110,8 +84,8 @@ def view_index():
                 name = 'destroy'
             
             try:
-                dataRead = read(name, request.form['id'])
-                return render_template("index.html", notes=dataRead)
+                resultData = read(name, request.form['id'])
+                return render_template("index.html", notes=resultData)
             except Exception as e:
                 return render_template("index.html", notes=str(e))
             
